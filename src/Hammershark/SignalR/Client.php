@@ -44,7 +44,6 @@ class Client
         $connector = new \Ratchet\Client\Connector($this->loop);
         $connector($this->buildConnectUrl())->then(function(\Ratchet\Client\WebSocket $conn) {
             $conn->on('message', function(\Ratchet\RFC6455\Messaging\MessageInterface $msg) use ($conn) {
-                echo "/";
                 $data = json_decode($msg);
                 if(\property_exists($data, "M")) {
                     foreach($data->M as $message) {
