@@ -1,0 +1,20 @@
+{
+    "name": "alexwight/php-signalr-client",
+    "description": "Signal R Client",
+    "type": "library",
+    "require": {
+        "ratchet/pawl": "^0.2.3",
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "authors": [
+        {
+            "name": "Alex Wight",
+            "email": "alex@hammershark.co.uk"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Hammershark\\SignalR\\": "src/"
+        }
+    }
+}
