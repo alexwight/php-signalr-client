@@ -3,7 +3,7 @@
     "description": "Signal R Client",
     "type": "library",
     "require": {
-        "ratchet/pawl": "^0.2.3",
+        "ratchet/pawl": "^0.3.0",
         "guzzlehttp/guzzle": "^6.3"
     },
     "authors": [
