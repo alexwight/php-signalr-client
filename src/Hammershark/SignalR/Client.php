@@ -2,6 +2,8 @@
 
 namespace Hammershark\SignalR;
 
+use Ratchet\Client\WebSocket;
+
 class Client
 {
     private $base_url;
@@ -10,6 +12,8 @@ class Client
     private $connectionId;
     private $loop;
     private $callbacks;
+    private $channels;
+    private $messageId = 1000;
 
     public function __construct($base_url, $hubs)
     {
@@ -43,6 +47,7 @@ class Client
         $this->loop = \React\EventLoop\Factory::create();
         $connector = new \Ratchet\Client\Connector($this->loop);
         $connector($this->buildConnectUrl())->then(function(\Ratchet\Client\WebSocket $conn) {
+            $this->subscribe($conn);
             $conn->on('message', function(\Ratchet\RFC6455\Messaging\MessageInterface $msg) use ($conn) {
                 $data = json_decode($msg);
                 if(\property_exists($data, "M")) {
@@ -150,5 +155,26 @@ class Client
         } catch(\Exception $e) {
             return false;
         }
+    }
+
+    private function subscribe(WebSocket $conn)
+    {
+        foreach ($this->hubs as $hub){
+            foreach ($this->channels as $channel){
+                $subscribeMsg = json_encode([
+                    'H' => 'CoreHub',
+                    'M' => 'SubscribeToSummaryDeltas',
+                    'A' => [],
+                    'I' => $this->messageId
+                ]);
+
+                $conn->send($subscribeMsg);
+            }
+        }
+    }
+
+    public function setChannels($channels)
+    {
+        $this->channels = $channels;
     }
 }
